@@ -1,0 +1,80 @@
+﻿@model SteamKendaraan.Models.OrderViewModel
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Detail Order</h1>
+
+<div>
+    <h4>Order Details</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Nama Pelanggan
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NamaPelanggan)
+        </dd>
+
+        <dt class="col-sm-2">
+            Nama Layanan
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NamaLayanan)
+        </dd>
+
+        <dt class="col-sm-2">
+            Nama Karyawan
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.NamaKaryawan)
+        </dd>
+
+        <dt class="col-sm-2">
+            Metode Pembayaran
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Payment_Method)
+        </dd>
+
+        <dt class="col-sm-2">
+            Total Bayar
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Total_Amount)
+        </dd>
+
+        <dt class="col-sm-2">
+            Jumlah Bayar
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Uang_Bayar)
+        </dd>
+
+        <dt class="col-sm-2">
+            Kembalian
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Kembalian)
+        </dd>
+
+        <dt class="col-sm-2">
+            Barcode
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Barcode)
+        </dd>
+
+        <dt class="col-sm-2">
+            Waktu Dibuat
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.CreatedOn)
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <a href="@Url.Action("Index", "Order")" class="btn btn-md btn-primary rounded-0"><i class="fa-solid fa-backward"></i> Kembali ke List</a>
+</div>

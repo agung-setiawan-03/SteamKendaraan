@@ -1,0 +1,179 @@
+﻿@model SteamKendaraan.Models.MasterOrder
+
+@{
+    ViewData["Title"] = "Create Order";
+}
+
+<h1>Buat Order</h1>
+
+<h4>Master Order</h4>
+<hr />
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="CreateOrder">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Dropdown untuk memilih pelanggan -->
+            <div class="form-group">
+                <label asp-for="ID_Pelanggan" class="control-label">Pilih Pelanggan</label>
+                <select asp-for="ID_Pelanggan" class="form-control" id="pelangganDropdown">
+                    <option value="">-- Pilih Pelanggan --</option>
+                    @foreach (var pelanggan in ViewBag.PelangganList)
+                    {
+                        <option value="@pelanggan.ID">@pelanggan.Nama - @pelanggan.Plat_nomor</option>
+                    }
+                </select>
+                <span asp-validation-for="ID_Pelanggan" class="text-danger"></span>
+            </div>
+
+            <!-- Dropdown untuk memilih layanan -->
+            <div class="form-group">
+                <label asp-for="ID_Layanan" class="control-label">Pilih Layanan</label>
+                <select id="layananDropdown" class="form-control" asp-for="ID_Layanan">
+                    <option value="">Pilih Layanan</option>
+                    @foreach (var layanan in ViewBag.LayananList)
+                    {
+                        <option value="@layanan.ID" data-harga="@layanan.Harga">@layanan.Nama_Layanan</option>
+                    }
+                </select>
+
+            </div>
+
+            <!-- Menampilkan harga layanan -->
+            <div class="form-group">
+                <label>Harga Layanan</label>
+                <input type="text" id="hargaLayanan" class="form-control" readonly placeholder="Harga Layanan" />
+            </div>
+
+            
+            <!-- Dropdown untuk memilih karyawan -->
+            <div class="form-group">
+                <label asp-for="ID_Karyawan" class="control-label">Pilih Karyawan</label>
+                <select asp-for="ID_Karyawan" class="form-control" id="karyawanDropdown">
+                    <option value="">-- Pilih Karyawan --</option>
+                    @foreach (var karyawan in ViewBag.KaryawanList)
+                    {
+                        <option value="@karyawan.ID">@karyawan.Nama</option>
+                    }
+                </select>
+                <span asp-validation-for="ID_Karyawan" class="text-danger"></span>
+            </div>
+
+
+            <!-- Dropdown untuk memilih metode pembayaran -->
+            <div class="form-group">
+                <label asp-for="Payment_Method" class="control-label">Metode Pembayaran</label>
+                <select asp-for="Payment_Method" class="form-control" id="paymentMethodDropdown">
+                    <option value="">-- Pilih Metode Pembayaran --</option>
+                    <option value="Cash">Cash</option>
+                    <option value="QRIS">QRIS</option>
+                </select>
+                <span asp-validation-for="Payment_Method" class="text-danger"></span>
+            </div>
+
+
+            <!-- Input untuk pembayaran cash -->
+            <div id="cashPaymentSection" style="display: none;">
+                <div class="form-group">
+                    <label asp-for="Uang_Bayar" class="control-label">Jumlah Bayar</label>
+                    <input asp-for="Uang_Bayar" id="Uang_Bayar" class="form-control" type="number" min="0" placeholder="Masukkan jumlah bayar" />
+                    <span asp-validation-for="Uang_Bayar" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label>Kembalian</label>
+                    <input type="text" id="Kembalian" class="form-control" readonly placeholder="Kembalian akan tampil di sini" />
+                </div>
+            </div>
+
+            <!-- QR Code untuk pembayaran QRIS -->
+            <div id="qrisPaymentSection" style="display: none;">
+                <h5>Silakan scan QR Code berikut untuk pembayaran:</h5>
+                <img src="~/images/qris.png" alt="QR Code QRIS" style="width: 200px; height: 200px;" />
+            </div>
+
+            <!-- Input total bayar -->
+            <div class="form-group">
+                <label asp-for="Total_Amount" class="control-label">Total Bayar</label>
+                <input asp-for="Total_Amount" class="form-control" id="totalAmount" readonly />
+                <span asp-validation-for="Total_Amount" class="text-danger"></span>
+            </div>
+
+            <!-- Tombol Submit -->
+            <div class="form-group" style="float: right; margin-top: 10px;">
+                <input type="submit" value="Save" class="btn btn-primary rounded-0" />
+                <a href="@Url.Action("Index", "Order")" class="btn btn-md btn-primary rounded-0"><i class="fa-solid fa-backward"></i> Back to list</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+    <script>
+        // Mengambil harga layanan saat dropdown layanan berubah
+        document.getElementById("layananDropdown").addEventListener("change", function () {
+            const selectedOption = this.options[this.selectedIndex];
+            const harga = selectedOption.getAttribute("data-harga");
+
+            // Mengisi input harga dan total amount
+            if (harga) {
+                document.getElementById("hargaLayanan").value = harga;
+                document.getElementById("totalAmount").value = harga;
+            } else {
+                document.getElementById("hargaLayanan").value = "";
+                document.getElementById("totalAmount").value = "";
+            }
+        });
+
+        // Menampilkan input pembayaran cash atau QRIS berdasarkan metode pembayaran yang dipilih
+        document.getElementById("paymentMethodDropdown").addEventListener("change", function () {
+            const method = this.value;
+            const cashSection = document.getElementById("cashPaymentSection");
+            const qrisSection = document.getElementById("qrisPaymentSection");
+
+            if (method === "Cash") {
+                cashSection.style.display = "block";
+                qrisSection.style.display = "none";
+                document.getElementById("Uang_Bayar").focus();
+            } else if (method === "QRIS") {
+                cashSection.style.display = "none";
+                qrisSection.style.display = "block";
+            } else {
+                cashSection.style.display = "none";
+                qrisSection.style.display = "none";
+            }
+        });
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const uangBayarInput = document.getElementById("Uang_Bayar");
+            const totalAmountInput = document.getElementById("totalAmount");
+            const kembalianInput = document.getElementById("Kembalian");
+
+            // Fungsi untuk menghitung kembalian
+            function hitungKembalian() {
+                const totalAmount = parseFloat(totalAmountInput.value) || 0;
+                const uangBayar = parseFloat(uangBayarInput.value) || 0;
+                const kembalian = uangBayar - totalAmount;
+
+                // Menampilkan kembalian
+                if (kembalian >= 0) {
+                    kembalianInput.value = kembalian.toLocaleString("id-ID", { style: "currency", currency: "IDR" });
+                    kembalianInput.style.color = "black";
+                } else {
+                    kembalianInput.value = "Uang bayar kurang!";
+                    kembalianInput.style.color = "red";
+                }
+            }
+
+            // Event listener saat input `Uang_Bayar` berubah
+            if (uangBayarInput) {
+                uangBayarInput.addEventListener("input", hitungKembalian);
+            }
+        });
+    </script>
+}
+
+

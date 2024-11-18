@@ -1,0 +1,57 @@
+﻿@model SteamKendaraan.Models.Pelanggan
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+
+
+<div class="card rounded-0">
+    <div class="card-header">
+        <h4>Hapus Pelanggan</h4>
+    </div>
+    <div class="card-body">
+        <h3 class="alert alert-danger">Apakah anda yakin ingin menghapus ini ?</h3>
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.ID)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.ID)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Nama)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Nama)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.Plat_nomor)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.Plat_nomor)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CreatedOn)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CreatedOn)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.UpdatedOn)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.UpdatedOn)
+            </dd>
+        </dl>
+    </div>
+    <div class="card-footer">
+        <div style="float:right">
+            <form asp-action="Delete">
+                <button type="submit" class="btn btn-md btn-danger rounded-0"><i class="fa-solid fa-trash"></i> Delete</button>
+                <a href="@Url.Action("Index", "Pelanggan")" class="btn btn-md btn-primary rounded-0"><i class="fa-solid fa-backward"></i> Back to list</a>
+            </form>
+        </div>
+    </div>
+</div>
+

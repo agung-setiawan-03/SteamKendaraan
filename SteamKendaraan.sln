@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35327.3
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SteamKendaraan", "SteamKendaraan\SteamKendaraan.csproj", "{5B0B067D-6424-4BB0-9975-556F61C1D310}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{5B0B067D-6424-4BB0-9975-556F61C1D310}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B0B067D-6424-4BB0-9975-556F61C1D310}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B0B067D-6424-4BB0-9975-556F61C1D310}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B0B067D-6424-4BB0-9975-556F61C1D310}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FE0FC35E-1D7D-4883-9099-307BCC05D1AA}
+	EndGlobalSection
+EndGlobal
