@@ -7,7 +7,9 @@
 <h1>Order List</h1>
 
 <p>
-    <a asp-action="CreateOrder">Create New</a>
+    <a asp-action="CreateOrder" class="btn btn-primary">
+        <i class="bi bi-plus"></i> Create New
+     </a>
 </p>
 <table class="table">
     <thead>
@@ -16,12 +18,12 @@
             <th>Nama Pelanggan</th>
             <th>Nama Layanan</th>
             <th>Nama Karyawan</th>
-            <th>@Html.DisplayNameFor(model => model.Payment_Method)</th>
-            <th>@Html.DisplayNameFor(model => model.Uang_Bayar)</th>
+            <th>Metode Pembayaran</th>
+            <th>Total</th>
+            <th>Uang Bayar</th>
             <th>@Html.DisplayNameFor(model => model.Kembalian)</th>
-            <th>@Html.DisplayNameFor(model => model.Barcode)</th>
-            <th>@Html.DisplayNameFor(model => model.Total_Amount)</th>
             <th>@Html.DisplayNameFor(model => model.CreatedOn)</th>
+            <th>Aksi</th>
             <th></th>
         </tr>
     </thead>
@@ -34,16 +36,22 @@
                     <td>@Html.DisplayFor(modelItem => item.NamaLayanan)</td>
                     <td>@Html.DisplayFor(modelItem => item.NamaKaryawan)</td>
                     <td>@Html.DisplayFor(modelItem => item.Payment_Method)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Total_Amount)</td>
                     <td>@Html.DisplayFor(modelItem => item.Uang_Bayar)</td>
                     <td>@Html.DisplayFor(modelItem => item.Kembalian)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Barcode)</td>
-                    <td>@Html.DisplayFor(modelItem => item.Total_Amount)</td>
                     <td>@Html.DisplayFor(modelItem => item.CreatedOn)</td>
                     <td>
                         <a href="@Url.Action("Details", "Order", new { id = item.ID })" class="btn btn-sm btn-info">
                             <i class="fa-solid fa-eye"></i>
                         </a>
                     </td>
+                <td>
+                    <a asp-action="PrintOrder" asp-route-orderId="@item.ID" class="btn btn-primary btn-sm">
+                        <i class="fa fa-print"></i> Print Order
+                    </a>
+                </td>
+
+
                 </tr>
         }
     </tbody>

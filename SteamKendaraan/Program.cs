@@ -1,3 +1,4 @@
+using DinkToPdf;
 using SteamKendaraan.Data;
 using SteamKendaraan.Repositories;
 
@@ -10,6 +11,7 @@ builder.Services.AddTransient<IMasterKaryawan, MasterKaryawanRepository>();
 builder.Services.AddTransient<IMasterLayanan, MasterLayananRepository>();
 builder.Services.AddTransient<IMasterOrder, MasterOrderRepository>();
 builder.Services.AddTransient<IPelanggan, PelangganRepository>();
+builder.Services.AddSingleton(typeof(DinkToPdf.Contracts.IConverter), new SynchronizedConverter(new PdfTools()));
 
 
 var app = builder.Build();

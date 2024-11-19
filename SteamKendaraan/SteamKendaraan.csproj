@@ -9,6 +9,8 @@
   <ItemGroup>
     <PackageReference Include="bootstrap" Version="5.3.3" />
     <PackageReference Include="Dapper" Version="2.1.35" />
+    <PackageReference Include="DinkToPdf" Version="1.0.8" />
+    <PackageReference Include="libwkhtmltox-64" Version="1.0.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="5.2.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.7" />
   </ItemGroup>

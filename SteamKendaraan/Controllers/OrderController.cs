@@ -3,6 +3,8 @@ using SteamKendaraan.Models;
 using SteamKendaraan.Repositories;
 using System.Threading.Tasks;
 using System;
+using DinkToPdf;
+using DinkToPdf.Contracts;
 
 namespace SteamKendaraan.Controllers
 {
@@ -178,18 +180,82 @@ namespace SteamKendaraan.Controllers
                 NamaLayanan = layanan?.Nama_Layanan ?? "Tidak Ditemukan",
                 NamaKaryawan = karyawan?.Nama ?? "Tidak Ditemukan",
                 Payment_Method = order.Payment_Method,
-                Uang_Bayar = order.Uang_Bayar ?? 0, // Menghindari null reference
-                Kembalian = order.Kembalian ?? 0,   // Menghindari null reference
+                Uang_Bayar = order.Uang_Bayar ?? 0, 
+                Kembalian = order.Kembalian ?? 0,   
                 Barcode = order.Barcode,
                 Total_Amount = order.Total_Amount,
-                CreatedOn = order.CreatedOn ?? DateTime.MinValue // Menghindari null reference
+                CreatedOn = order.CreatedOn ?? DateTime.MinValue 
             };
 
             return View(orderViewModel);
         }
 
 
+        public async Task<IActionResult> PrintOrder(int orderId)
+        {
+            var order = await _orderRepository.Find(orderId);
+            if (order == null)
+            {
+                return NotFound("Order tidak ditemukan.");
+            }
 
+            // Mengambil detail pelanggan, layanan, dan karyawan
+            var pelanggan = await _pelangganRepository.Find(order.ID_Pelanggan);
+            var layanan = await _layananRepository.Find(order.ID_Layanan);
+            var karyawan = await _karyawanRepository.Find(order.ID_Karyawan);
+
+            // Membuat konten HTML untuk PDF
+            var htmlContent = $@"
+        <html>
+        <head>
+            <style>
+                body {{ font-family: Arial, sans-serif; }}
+                .header {{ text-align: center; font-size: 24px; margin-bottom: 20px; }}
+                .content {{ margin: 0 auto; width: 80%; }}
+                .detail {{ margin-bottom: 10px; }}
+                .total {{ font-weight: bold; }}
+            </style>
+        </head>
+        <body>
+            <div class='header'>Struk Pembayaran</div>
+            <div class='content'>
+                <div class='detail'><strong>Pelanggan:</strong> {pelanggan?.Nama ?? "Tidak Ditemukan"}</div>
+                <div class='detail'><strong>Layanan:</strong> {layanan?.Nama_Layanan ?? "Tidak Ditemukan"}</div>
+                <div class='detail'><strong>Karyawan:</strong> {karyawan?.Nama ?? "Tidak Ditemukan"}</div>
+                <div class='detail'><strong>Metode Pembayaran:</strong> {order.Payment_Method}</div>
+                <div class='detail'><strong>Total Bayar:</strong> {order.Total_Amount:C}</div>
+                <div class='detail'><strong>Uang Bayar:</strong> {order.Uang_Bayar:C}</div>
+                <div class='detail'><strong>Kembalian:</strong> {order.Kembalian:C}</div>
+                <div class='total'>Terima Kasih Telah Bertransaksi!</div>
+            </div>
+        </body>
+        </html>";
+
+            // Mengonfigurasi PDF
+            var pdfDoc = new HtmlToPdfDocument()
+            {
+                GlobalSettings = new GlobalSettings
+                {
+                    PaperSize = PaperKind.A4,
+                    Orientation = Orientation.Portrait,
+                    Out = null // Biarkan null untuk mengunduh file
+                },
+                Objects = {
+            new ObjectSettings
+            {
+                HtmlContent = htmlContent,
+                WebSettings = { DefaultEncoding = "utf-8" }
+            }
+        }
+            };
+
+            // Mengonversi HTML ke PDF
+            var converter = HttpContext.RequestServices.GetService<IConverter>();
+            var pdf = converter.Convert(pdfDoc);
+
+            // Mengunduh PDF
+            return File(pdf, "application/pdf", $"Order_{orderId}.pdf");
+        }
 
     }
 }
